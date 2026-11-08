@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Backups Automatizado 3-2-1 | MariaDB & Cloudflare R2</title>
+  <meta name="description" content="Implementación integral de una estrategia de respaldo 3-2-1 para MariaDB (sakila) con almacenamiento local, disco externo NTFS, Cloudflare R2, automatización con cron y bot de Telegram con n8n.">
+  
+  <!-- Tipografía Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Estilos -->
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/landing.css">
+</head>
+<body>
+
+  <!-- Fondo Dinámico en Movimiento Suave y Difuminado para toda la página -->
+  <div class="page-ambient-mesh" aria-hidden="true">
+    <div class="mesh-orb mesh-orb-1"></div>
+    <div class="mesh-orb mesh-orb-2"></div>
+    <div class="mesh-orb mesh-orb-3"></div>
+    <div class="mesh-orb mesh-orb-4"></div>
+  </div>
+
+  <!-- Header Superior -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="./" class="header-brand">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--primary);">
+          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+        </svg>
+        <span>Backup 3-2-1</span>
+        <span class="brand-badge">MariaDB Lab</span>
+      </a>
+
+      <nav class="header-nav">
+        <a href="#construccion" class="nav-link">¿Qué se construyó?</a>
+        <a href="#arquitectura" class="nav-link">Arquitectura</a>
+        <a href="#herramientas" class="nav-link">Herramientas</a>
+        <a href="#fases" class="nav-link">Fases</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="theme-toggle" type="button" aria-label="Cambiar tema">
+          <!-- Sol (Dark mode) -->
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <!-- Luna (Light mode) -->
+          <svg class="icon-moon" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+
+        <a href="docs" class="btn btn-primary">
+          <span>Ver documentación</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-container">
+      <div class="hero-content">
+        <div class="hero-pill">
+          <span class="pulse-dot"></span>
+          <span>Estrategia 3-2-1 en Producción Universitaria</span>
+        </div>
+
+        <h1 class="hero-title">
+          Sistema Automatizado de Backups con <span class="gradient-text">Regla 3-2-1</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Protección integral y redundante para la base de datos <strong>sakila</strong> en MariaDB: copias en almacenamiento local, disco externo NTFS y la nube de <strong>Cloudflare R2</strong>, con orquestación mediante <strong>cron</strong> y disparo manual bajo demanda vía <strong>bot de Telegram con n8n</strong>.
+        </p>
+
+        <div class="hero-badges">
+          <span class="tech-badge">🐬 MariaDB 10.4.32</span>
+          <span class="tech-badge">📦 sakila (~700 KB .sql.gz)</span>
+          <span class="tech-badge">☁️ Cloudflare R2 (Offsite)</span>
+          <span class="tech-badge">⏰ cron desatendido</span>
+          <span class="tech-badge">🤖 Telegram + n8n</span>
+          <span class="tech-badge">🛡️ chmod 600 (.my.cnf)</span>
+          <span class="tech-badge">🗑️ Retención 7 días</span>
+        </div>
+
+        <div class="hero-actions">
+          <a href="docs" class="btn btn-primary" style="font-size:1rem; padding:0.75rem 1.6rem;">
+            <span>Ver documentación</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Terminal Preview con logs reales del proyecto -->
+      <div class="hero-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+          </div>
+          <span class="terminal-title">kamscript@linux: ~/backup_db.sh</span>
+        </div>
+        <div class="terminal-body">
+          <p><span class="terminal-prompt">kamscript@linux:~$</span> <span class="terminal-cmd">bash ~/backup_db.sh</span></p>
+          <p class="terminal-info">[2026-11-06 22:00:01] ===== INICIO DE BACKUP: sakila_2026-11-06_22-00 =====</p>
+          <p class="terminal-success">[2026-11-06 22:00:02] OK  Copia 1 (local): sakila_2026-11-06_22-00.sql.gz [684K]</p>
+          <p class="terminal-success">[2026-11-06 22:00:03] OK  Copia 2 (disco externo): copiado a /media/kamscript/MaztherOS/backups_db</p>
+          <p class="terminal-success">[2026-11-06 22:00:05] OK  Copia 3 (Cloudflare R2): subido a r2:backups-sakila-lab</p>
+          <p class="terminal-info">[2026-11-06 22:00:06] Retencion aplicada: se conservan 7 dias</p>
+          <p class="terminal-info">[2026-11-06 22:00:06] ===== FIN DE BACKUP =====</p>
+          <p><span class="terminal-prompt">kamscript@linux:~$</span> <span class="terminal-cmd">tail -n 1 ~/backups/backup.log</span></p>
+          <p class="terminal-muted">[2026-11-06 22:00:06] ===== FIN DE BACKUP =====</p>
+          <p><span class="terminal-prompt">kamscript@linux:~$</span> <span class="terminal-cmd">_</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección: ¿Qué se construyó? -->
+  <section class="landing-section" id="construccion">
+    <div class="section-header">
+      <span class="section-tag">Fundamentos & Alcance</span>
+      <h2 class="section-title">¿Qué se construyó en este proyecto?</h2>
+      <p class="section-description">
+        Una solución de respaldo de nivel empresarial implementada sobre infraestructura académica, diseñada bajo estándares de alta disponibilidad, seguridad de mínimo privilegio y tolerancia a fallos.
+      </p>
+    </div>
+
+    <!-- Las 3 Reglas de Oro (3-2-1) con diseño card referencial -->
+    <div class="rule-321-grid">
+      <div class="rule-card">
+        <div class="tool-top-row">
+          <div class="rule-badge-num">3</div>
+          <div class="tool-action-pill" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </div>
+        </div>
+        <h3>Copias de los Datos</h3>
+        <p>Tres copias simultáneas y verificadas del dump comprimido de la base de datos <code>sakila</code> en cada ejecución del pipeline.</p>
+        <div class="rule-detail">
+          1. Local (PC)<br>
+          2. Disco externo (NTFS)<br>
+          3. Nube (Cloudflare R2)
+        </div>
+        <a href="docs?modulo=panel" class="tool-pill-btn">
+          <span>Ver especificación</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </a>
+      </div>
+
+      <div class="rule-card">
+        <div class="tool-top-row">
+          <div class="rule-badge-num">2</div>
+          <div class="tool-action-pill" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </div>
+        </div>
+        <h3>Medios Distintos</h3>
+        <p>Dos formatos de hardware y medios de almacenamiento físicos completamente diferentes para aislar fallas mecánicas de disco.</p>
+        <div class="rule-detail">
+          • Disco interno del PC (ext4)<br>
+          • Disco externo portátil (NTFS) montado dinámicamente
+        </div>
+        <a href="docs?modulo=02" class="tool-pill-btn">
+          <span>Ver módulo</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </a>
+      </div>
+
+      <div class="rule-card">
+        <div class="tool-top-row">
+          <div class="rule-badge-num">1</div>
+          <div class="tool-action-pill" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </div>
+        </div>
+        <h3>Copia Offsite (Nube)</h3>
+        <p>Una copia fuera del espacio físico del laboratorio, inmune a siniestros locales, robos, sobretensiones o desastres físicos.</p>
+        <div class="rule-detail">
+          • Cloudflare R2 Object Storage<br>
+          • Protocolo S3 con HTTPS cifrado
+        </div>
+        <a href="docs?modulo=03" class="tool-pill-btn">
+          <span>Ver módulo</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Pilares Técnicos -->
+    <div class="pillars-grid">
+      <div class="pillar-item">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        </div>
+        <div>
+          <h4>Automatización con cron</h4>
+          <p>Ejecución periódica desatendida programada diariamente a las 2:00 AM (probada cada 5 min). Entorno con rutas absolutas e independientes de sesión interactiva.</p>
+        </div>
+      </div>
+
+      <div class="pillar-item">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg>
+        </div>
+        <div>
+          <h4>Disparo Manual vía Telegram</h4>
+          <p>Bot en Telegram que recibe <code>/backup Sakila2026!</code>. Conectado a n8n mediante túnel HTTPS <code>cloudflared</code>, ejecutando el script y devolviendo un reporte legible con emojis.</p>
+        </div>
+      </div>
+
+      <div class="pillar-item">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+        </div>
+        <div>
+          <h4>Retención Automática de 7 Días</h4>
+          <p>Auto-limpieza integrada que purga copias antiguas tanto en local (<code>find -mtime +7 -delete</code>) como en Cloudflare R2 (<code>rclone delete --min-age 7d</code>), previniendo saturación.</p>
+        </div>
+      </div>
+
+      <div class="pillar-item">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        </div>
+        <div>
+          <h4>Mínimo Privilegio & Credenciales</h4>
+          <p>Usuario MariaDB <code>backup_user</code> con solo lectura sobre <code>sakila.*</code>. Credenciales protegidas en <code>~/.my.cnf</code> con permisos <code>600</code> y token R2 exclusivo para el bucket.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección: Arquitectura del Sistema -->
+  <section class="landing-section" id="arquitectura">
+    <div class="section-header">
+      <span class="section-tag">Topología del Flujo</span>
+      <h2 class="section-title">Arquitectura Visual del Sistema</h2>
+      <p class="section-description">
+        Mapeo integral de la transferencia de datos: desde la base de datos hasta los tres repositorios y los dos canales de activación independiente (cron y Telegram).
+      </p>
+    </div>
+
+    <div class="architecture-container">
+      <div class="arch-canvas">
+        
+        <!-- Fila Superior: Pipeline de Backup 3-2-1 -->
+        <div class="arch-flow-row">
+          
+          <!-- Origen -->
+          <div class="arch-node">
+            <div class="arch-node-header">
+              <span class="arch-node-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+                MariaDB
+              </span>
+              <span class="arch-badge badge-source">Origen</span>
+            </div>
+            <p class="arch-node-desc">Base de datos <strong>sakila</strong> en XAMPP. Acceso vía <code>backup_user</code> y <code>.my.cnf</code>.</p>
+            <span class="arch-node-code">mysqldump sakila | gzip</span>
+          </div>
+
+          <!-- Destino 1 -->
+          <div class="arch-node">
+            <div class="arch-node-header">
+              <span class="arch-node-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+                Copia 1: Local
+              </span>
+              <span class="arch-badge badge-dest">Local</span>
+            </div>
+            <p class="arch-node-desc">Directorio de respaldo en almacenamiento interno con permisos de usuario.</p>
+            <span class="arch-node-code">~/backups/db/*.sql.gz</span>
+          </div>
+
+          <!-- Destino 2 -->
+          <div class="arch-node">
+            <div class="arch-node-header">
+              <span class="arch-node-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="12" x2="2" y2="12"></line><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path><line x1="6" y1="16" x2="6.01" y2="16"></line><line x1="10" y1="16" x2="10.01" y2="16"></line></svg>
+                Copia 2: Disco NTFS
+              </span>
+              <span class="arch-badge badge-dest">Medio 2</span>
+            </div>
+            <p class="arch-node-desc">Disco externo validado con <code>mountpoint -q</code>. Tolerante a desconexión.</p>
+            <span class="arch-node-code">/media/.../MaztherOS/backups_db</span>
+          </div>
+
+          <!-- Destino 3 -->
+          <div class="arch-node">
+            <div class="arch-node-header">
+              <span class="arch-node-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>
+                Copia 3: Offsite
+              </span>
+              <span class="arch-badge badge-dest">Nube</span>
+            </div>
+            <p class="arch-node-desc">Cloudflare R2 vía <code>rclone</code>. API token de cuenta con HTTPS seguro.</p>
+            <span class="arch-node-code">r2:backups-sakila-lab</span>
+          </div>
+
+        </div>
+
+        <!-- Conector Intermedio -->
+        <div class="arch-connector-row">
+          <div class="arch-connector-line"></div>
+          <span>Mecanismos de Disparo y Orquestación</span>
+          <div class="arch-connector-line"></div>
+        </div>
+
+        <!-- Fila Inferior: Disparadores Paralelos -->
+        <div class="arch-dual-triggers">
+          <!-- Disparador 1: cron -->
+          <div class="trigger-box">
+            <div class="trigger-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <span>Disparador Automático: cron</span>
+              <span class="arch-badge badge-trigger" style="margin-left:auto;">Tiempo</span>
+            </div>
+            <p style="font-size:0.875rem; color:var(--text-secondary);">
+              Demonio de sistema Linux que ejecuta <code>~/backup_db.sh</code> bajo el crontab del usuario <code>kamscript</code>. Lee <code>~/.my.cnf</code> automáticamente.
+            </p>
+            <span class="arch-node-code">0 2 * * * /home/kamscript/backup_db.sh</span>
+          </div>
+
+          <!-- Disparador 2: n8n + Telegram -->
+          <div class="trigger-box">
+            <div class="trigger-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg>
+              <span>Disparador Manual: Telegram + n8n</span>
+              <span class="arch-badge badge-trigger" style="margin-left:auto;">Evento</span>
+            </div>
+            <p style="font-size:0.875rem; color:var(--text-secondary);">
+              El usuario envía <code>/backup Sakila2026!</code>. Telegram notifica al webhook a través del túnel <code>cloudflared</code>. n8n valida la clave, ejecuta el script, procesa el stdout con regex y responde el reporte.
+            </p>
+            <span class="arch-node-code">Telegram ➔ cloudflared ➔ n8n ➔ backup_db.sh ➔ Reporte</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección: Herramientas y Justificación Técnica (Diseño de Cards Anexado) -->
+  <section class="landing-section" id="herramientas">
+    <div class="section-header">
+      <span class="section-tag">Stack Tecnológico</span>
+      <h2 class="section-title">Herramientas y por qué se eligieron</h2>
+      <p class="section-description">
+        Cada herramienta fue seleccionada por sus ventajas técnicas operativas, robustez ante fallos, compatibilidad con la regla 3-2-1 y costo cero.
+      </p>
+    </div>
+
+    <div class="tools-grid">
+
+      <!-- MariaDB -->
+      <div class="tool-card">
+        <div class="tool-top-row">
+          <div class="tool-logo-box">
+            <img src="https://cdn.simpleicons.org/mariadb/003545" alt="Logo MariaDB" onerror="this.onerror=null; this.src='https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/mariadb.svg';">
+          </div>
+          <div class="tool-action-pill" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </div>
+        </div>
+        <h3 class="tool-name">MariaDB</h3>
+        <span class="tool-category">Base de Datos Relacional</span>
+        <p class="tool-reason">
+          Motor SQL donde reside la base académica <strong>sakila</strong>. Se eligió por su alto rendimiento, compatibilidad con <code>mysqldump</code> para bloqueos consistentes de tablas (<code>LOCK TABLES</code>) sin interrumpir lecturas, y su sistema granular de privilegios que permite crear usuarios dedicados de sólo lectura (<code>backup_user</code>).
+        </p>
+        <a href="docs?modulo=01" class="tool-pill-btn">
+          <span>Ver módulo</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </a>
+      </div>
+
+      <!-- GNU Bash -->
+      <div class="tool-card">
+        <div class="tool-top-row">
+          <div class="tool-logo-box">
+            <img src="https://cdn.simpleicons.org/gnubash/4EAA25" alt="Logo GNU Bash" onerror="this.onerror=null; this.src='https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/gnubash.svg';">
+          </div>
+          <div class="tool-action-pill" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </div>
+        </div>
+        <h3 class="tool-name">GNU Bash</h3>
+        <span class="tool-category">Scripting & Orquestación</span>
+        <p class="tool-reason">
+          Intérprete de comandos estándar en Linux donde se desarrolló <code>~/backup_db.sh</code>. Se eligió por permitir <code>set -o pipefail</code> (garantizando que fallas en el dump no se oculten tras el gzip), manejo nativo de códigos de salida (<code>$?</code>), redirecciones duales con <code>tee</code> y chequeo condicional del disco externo con <code>mountpoint -q</code>.
+        </p>
+        <a href="docs?modulo=04" class="tool-pill-btn">
+          <span>Ver módulo</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </a>
+      </div>
+
+      <!-- cron -->
+      <div class="tool-card">
+        <div class="tool-top-row">
+          <div class="tool-logo-box" style="background:rgba(56, 189, 248, 0.1); color:var(--primary);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          </div>
+          <div class="tool-action-pill" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </div>
+        </div>
+        <h3 class="tool-name">cron</h3>
+        <span class="tool-category">Planificador de Tareas Linux</span>
+        <p class="tool-reason">
+          Demonio residente del sistema operativo que automatiza la ejecución periódica sin interfaz gráfica. Se seleccionó porque corre en segundo plano como el usuario <code>kamscript</code>, cargando su <code>$HOME</code> y el archivo <code>~/.my.cnf</code> sin solicitar contraseñas, ejecutando a las 2:00 AM con cero consumo de memoria residual.
+        </p>
+        <a href="docs?modulo=05" class="tool-pill-btn">
+          <span>Ver módulo</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </a>
+      </div>
+
+      <!-- rclone -->
+      <div class="tool-card">
+        <div class="tool-top-row">
+          <div class="tool-logo-box">
+            <img src="https://cdn.simpleicons.org/rclone/B63124" alt="Logo rclone" onerror="this.onerror=null; this.src='https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/rclone.svg';">
+          </div>
+          <div class="tool-action-pill" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </div>
+        </div>
+        <h3 class="tool-name">rclone</h3>
+        <span class="tool-category">Sincronizador Cloud CLI</span>
+        <p class="tool-reason">
+          Conocido como la "navaja suiza" del almacenamiento cloud. Se eligió por su soporte nativo para Cloudflare R2 vía protocolo S3, cifrado HTTPS en tránsito, capacidad de operar con la bandera <code>no_check_bucket=true</code> (esencial con tokens limitados a un solo bucket) y comandos integrados de retención como <code>--min-age 7d</code>.
+        </p>
+        <a href="docs?modulo=03" class="tool-pill-btn">
+          <span>Ver módulo</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </a>
+      </div>
+
+      <!-- Cloudflare R2 -->
+      <div class="tool-card">
+        <div class="tool-top-row">
+          <div class="tool-logo-box">
+            <img src="https://cdn.simpleicons.org/cloudflare/F38020" alt="Logo Cloudflare" onerror="this.onerror=null; this.src='https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/cloudflare.svg';">
+          </div>
+          <div class="tool-action-pill" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </div>
+        </div>
+        <h3 class="tool-name">Cloudflare R2</h3>
+        <span class="tool-category">Almacenamiento de Objetos S3</span>
+        <p class="tool-reason">
+          Destino offsite de la Copia 3. Se eligió por su generosa capa gratuita de 10 GB (los dumps de sakila pesan solo ~700 KB, resultando en un costo real de $0), cero tarifas de transferencia de salida (egress fees), alta durabilidad geográfica y generación de API tokens con permisos acotados estrictamente a un único bucket.
+        </p>
+        <a href="docs?modulo=03" class="tool-pill-btn">
+          <span>Ver módulo</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </a>
+      </div>
+
+      <!-- n8n -->
+      <div class="tool-card">
+        <div class="tool-top-row">
+          <div class="tool-logo-box">
+            <img src="https://cdn.simpleicons.org/n8n/EA4B71" alt="Logo n8n" onerror="this.onerror=null; this.src='https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/n8n.svg';">
+          </div>
+          <div class="tool-action-pill" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </div>
+        </div>
+        <h3 class="tool-name">n8n</h3>
+        <span class="tool-category">Orquestador de Workflows</span>
+        <p class="tool-reason">
+          Motor de automatización basado en nodos instalado localmente con npm (sin Docker). Se seleccionó para recibir los webhooks de Telegram, validar la clave de seguridad (<code>Sakila2026!</code>), disparar <code>backup_db.sh</code> mediante el nodo <code>Execute Command</code> y transformar el log técnico mediante regex a un mensaje amigable con emojis.
+        </p>
+        <a href="docs?modulo=06" class="tool-pill-btn">
+          <span>Ver módulo</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </a>
+      </div>
+
+      <!-- Telegram -->
+      <div class="tool-card">
+        <div class="tool-top-row">
+          <div class="tool-logo-box">
+            <img src="https://cdn.simpleicons.org/telegram/26A5E4" alt="Logo Telegram" onerror="this.onerror=null; this.src='https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/telegram.svg';">
+          </div>
+          <div class="tool-action-pill" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </div>
+        </div>
+        <h3 class="tool-name">Telegram Bot</h3>
+        <span class="tool-category">Interfaz de Usuario Móvil</span>
+        <p class="tool-reason">
+          Canal de disparo bajo demanda y reporte instantáneo. Permite que cualquier usuario autorizado, desde cualquier dispositivo y sin acceso SSH al servidor, ejecute <code>/backup CLAVE</code> y reciba en segundos la confirmación visual (✅/⚠️/❌) del estado de las 3 copias, tamaño y retención.
+        </p>
+        <a href="docs?modulo=06" class="tool-pill-btn">
+          <span>Ver módulo</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </a>
+      </div>
+
+      <!-- XAMPP -->
+      <div class="tool-card">
+        <div class="tool-top-row">
+          <div class="tool-logo-box">
+            <img src="https://cdn.simpleicons.org/xampp/FB7A24" alt="Logo XAMPP" onerror="this.onerror=null; this.src='https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/xampp.svg';">
+          </div>
+          <div class="tool-action-pill" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </div>
+        </div>
+        <h3 class="tool-name">XAMPP</h3>
+        <span class="tool-category">Pila Web Local</span>
+        <p class="tool-reason">
+          Entorno de laboratorio preconfigurado que aloja el servidor MariaDB 10.4.32 y sus binarios de administración cliente en <code>/opt/lampp/bin/</code> (incluyendo <code>mariadb</code> y <code>mysqldump</code>). Facilita el despliegue del esquema y datos de muestra de sakila.
+        </p>
+        <a href="docs?modulo=01" class="tool-pill-btn">
+          <span>Ver módulo</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </a>
+      </div>
+
+      <!-- Linux -->
+      <div class="tool-card">
+        <div class="tool-top-row">
+          <div class="tool-logo-box">
+            <img src="https://cdn.simpleicons.org/linux/FCC624" alt="Logo Linux" onerror="this.onerror=null; this.src='https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/linux.svg';">
+          </div>
+          <div class="tool-action-pill" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </div>
+        </div>
+        <h3 class="tool-name">Linux</h3>
+        <span class="tool-category">Sistema Operativo Host</span>
+        <p class="tool-reason">
+          El sistema operativo anfitrión. Proporciona la robustez de permisos POSIX (<code>chmod 600</code> para salvaguardar contraseñas), montaje seguro de discos (<code>mountpoint</code>, <code>lsblk</code>), compresión eficiente (<code>gzip</code>) y el subsistema de crontab multiusuario.
+        </p>
+        <a href="docs?modulo=07" class="tool-pill-btn">
+          <span>Ver comandos</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Sección: Fases del Proyecto -->
+  <section class="landing-section" id="fases">
+    <div class="section-header">
+      <span class="section-tag">Metodología de Desarrollo</span>
+      <h2 class="section-title">Fases del Proyecto y Módulos</h2>
+      <p class="section-description">
+        El desarrollo fue estructurado en 7 fases incrementales y verificables, cada una con checkpoints claros y documentación técnica detallada.
+      </p>
+    </div>
+
+    <div class="phases-table-container">
+      <table class="phases-table">
+        <thead>
+          <tr>
+            <th>Fase</th>
+            <th>Módulo / Documento</th>
+            <th>Descripción Técnica</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="phase-number">01</span></td>
+            <td><strong>Usuario de backup en MariaDB</strong></td>
+            <td>Creación del usuario <code>backup_user@localhost</code> con permisos mínimos (SELECT, LOCK TABLES, SHOW VIEW) y protección en <code>~/.my.cnf</code> con <code>chmod 600</code>.</td>
+            <td><a href="docs?modulo=01" class="tool-link">Ver módulo ➔</a></td>
+          </tr>
+          <tr>
+            <td><span class="phase-number">02</span></td>
+            <td><strong>Disco externo (Copia 2)</strong></td>
+            <td>Identificación con <code>lsblk</code>, montaje en <code>/media/kamscript/MaztherOS</code>, creación de <code>backups_db</code> y validación con <code>mountpoint -q</code>.</td>
+            <td><a href="docs?modulo=02" class="tool-link">Ver módulo ➔</a></td>
+          </tr>
+          <tr>
+            <td><span class="phase-number">03</span></td>
+            <td><strong>Cloudflare R2 (Copia 3 - Offsite)</strong></td>
+            <td>Creación del bucket <code>backups-sakila-lab</code>, token de cuenta S3, instalación de <code>rclone</code> y ajuste obligatorio <code>no_check_bucket=true</code>.</td>
+            <td><a href="docs?modulo=03" class="tool-link">Ver módulo ➔</a></td>
+          </tr>
+          <tr>
+            <td><span class="phase-number">04</span></td>
+            <td><strong>Script maestro de backup</strong></td>
+            <td>Desarrollo de <code>~/backup_db.sh</code> con <code>set -o pipefail</code>, generación del dump, copia a los 3 destinos, logging con <code>tee</code> y retención de 7 días.</td>
+            <td><a href="docs?modulo=04" class="tool-link">Ver módulo ➔</a></td>
+          </tr>
+          <tr>
+            <td><span class="phase-number">05</span></td>
+            <td><strong>Automatización con cron</strong></td>
+            <td>Registro en el crontab del usuario, configuración del entorno con rutas absolutas, prueba de ejecución cada 5 min y horario definitivo diario a las 2:00 AM.</td>
+            <td><a href="docs?modulo=05" class="tool-link">Ver módulo ➔</a></td>
+          </tr>
+          <tr>
+            <td><span class="phase-number">06</span></td>
+            <td><strong>n8n y Telegram</strong></td>
+            <td>Bot @BotFather, túnel HTTPS temporal con <code>cloudflared</code>, workflow en n8n de 7 nodos, validación de clave <code>Sakila2026!</code> y regex parser para resumen.</td>
+            <td><a href="docs?modulo=06" class="tool-link">Ver módulo ➔</a></td>
+          </tr>
+          <tr>
+            <td><span class="phase-number">07</span></td>
+            <td><strong>Glosario y comandos útiles</strong></td>
+            <td>Compendio de comandos para MariaDB, gestión de permisos UNIX, comandos de <code>rclone</code>, sintaxis de crontab y restauración de backups.</td>
+            <td><a href="docs?modulo=07" class="tool-link">Ver módulo ➔</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <h4>Sistema de Backups 3-2-1</h4>
+        <p>
+          Proyecto universitario desarrollado para el laboratorio de <strong>Diseño de Bases de Datos</strong>. Implementación de redundancia distribuida (local, externo y nube) para bases relacionales en MariaDB.
+        </p>
+        <div class="footer-academic-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+          <span>Materia: Diseño de Bases de Datos · Base: sakila</span>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <ul class="footer-links">
+          <li><a href="./">Inicio</a></li>
+          <li><a href="#construccion">¿Qué se construyó?</a></li>
+          <li><a href="#arquitectura">Arquitectura del sistema</a></li>
+          <li><a href="#herramientas">Herramientas y justificación</a></li>
+          <li><a href="#fases">Fases del proyecto</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Módulos de la Documentación</h4>
+        <ul class="footer-links">
+          <li><a href="docs?modulo=01">Fase 1: Usuario MariaDB</a></li>
+          <li><a href="docs?modulo=02">Fase 2: Disco externo NTFS</a></li>
+          <li><a href="docs?modulo=03">Fase 3: Cloudflare R2</a></li>
+          <li><a href="docs?modulo=04">Fase 4: Script maestro bash</a></li>
+          <li><a href="docs?modulo=05">Fase 5: Automatización cron</a></li>
+          <li><a href="docs?modulo=06">Fase 6: n8n y Telegram</a></li>
+          <li><a href="docs?modulo=07">Fase 7: Glosario de comandos</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Laboratorio de Diseño de Bases de Datos — Todos los derechos reservados.</span>
+      <span>Documentación técnica generada a partir de las notas de laboratorio en <code>notas/</code>.</span>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/js/theme.js"></script>
+
+  <!-- Compatibilidad fluida para servidores locales sin reescritura nativa (como Live Server) -->
+  <script>
+    document.addEventListener('click', function(e) {
+      const link = e.target.closest('a');
+      if (!link) return;
+      const href = link.getAttribute('href');
+      if (!href) return;
+      if (href === 'docs' || href.startsWith('docs?')) {
+        if (location.protocol === 'file:' || location.port === '5500') {
+          e.preventDefault();
+          const target = href.replace(/^docs(\??)/, 'docs.html$1');
+          window.location.href = target;
+        }
+      }
+    });
+  </script>
+</body>
+</html>
