@@ -63,7 +63,44 @@
           </svg>
         </button>
 
-        <a href="docs" class="btn btn-primary">
+        <a href="docs" class="btn btn-primary header-cta-btn">
+          <span>Ver documentación</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </a>
+
+        <!-- Botón Hamburguesa Móvil -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-label="Abrir menú de navegación" aria-expanded="false">
+          <svg class="icon-menu-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          <svg class="icon-menu-close" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Menú Móvil Desplegable (Drawer) -->
+    <div class="mobile-nav-drawer" id="mobileNavDrawer" aria-hidden="true">
+      <nav class="mobile-nav-links">
+        <a href="#construccion" class="mobile-nav-link">¿Qué se construyó?</a>
+        <a href="#arquitectura" class="mobile-nav-link">Arquitectura</a>
+        <a href="#herramientas" class="mobile-nav-link">Herramientas</a>
+        <a href="#fases" class="mobile-nav-link">Fases del proyecto</a>
+      </nav>
+      <div class="mobile-nav-actions">
+        <a href="https://t.me/backup_kamscript_bot" target="_blank" rel="noopener noreferrer" class="btn btn-telegram mobile-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
+          </svg>
+          <span>Bot Telegram (@backup_kamscript_bot)</span>
+        </a>
+        <a href="docs" class="btn btn-primary mobile-btn">
           <span>Ver documentación</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <polyline points="9 18 15 12 9 6"></polyline>
@@ -71,6 +108,7 @@
         </a>
       </div>
     </div>
+    <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
   </header>
 
   <!-- Hero Section -->
@@ -101,12 +139,26 @@
         </div>
 
         <div class="hero-actions">
-          <a href="docs" class="btn btn-primary" style="font-size:1rem; padding:0.75rem 1.6rem;">
+          <a href="docs" class="btn btn-primary hero-btn-docs">
             <span>Ver documentación</span>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
             </svg>
+          </a>
+
+          <a href="https://t.me/backup_kamscript_bot" target="_blank" rel="noopener noreferrer" class="btn btn-telegram hero-btn-telegram">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
+            </svg>
+            <span>Bot Telegram</span>
+          </a>
+
+          <a href="https://t.me/backup_kamscript_bot" target="_blank" rel="noopener noreferrer" class="btn btn-telegram hero-btn-telegram">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
+            </svg>
+            <span>Bot Telegram (@backup_kamscript_bot)</span>
           </a>
         </div>
       </div>
@@ -352,7 +404,7 @@
               <span class="arch-badge badge-trigger" style="margin-left:auto;">Evento</span>
             </div>
             <p style="font-size:0.875rem; color:var(--text-secondary);">
-              El usuario envía <code>/backup Sakila2026!</code>. Telegram notifica al webhook a través del túnel <code>cloudflared</code>. n8n valida la clave, ejecuta el script, procesa el stdout con regex y responde el reporte.
+              El usuario envía <code>/backup Sakila2026!</code> al bot <a href="https://t.me/backup_kamscript_bot" target="_blank" rel="noopener noreferrer" style="color:var(--primary); font-weight:600; text-decoration:underline; text-underline-offset:2px;">@backup_kamscript_bot</a>. Telegram notifica al webhook a través del túnel <code>cloudflared</code>. n8n valida la clave, ejecuta el script, procesa el stdout con regex y responde el reporte.
             </p>
             <span class="arch-node-code">Telegram ➔ cloudflared ➔ n8n ➔ backup_db.sh ➔ Reporte</span>
           </div>
@@ -656,6 +708,7 @@
           <li><a href="#arquitectura">Arquitectura del sistema</a></li>
           <li><a href="#herramientas">Herramientas y justificación</a></li>
           <li><a href="#fases">Fases del proyecto</a></li>
+          <li><a href="https://t.me/backup_kamscript_bot" target="_blank" rel="noopener noreferrer" style="color:var(--primary); font-weight:600;">🤖 Bot Telegram (@backup_kamscript_bot)</a></li>
         </ul>
       </div>
 

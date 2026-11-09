@@ -225,6 +225,17 @@
   flex-wrap: wrap;
   gap: 1rem;
   margin-top: 0.5rem;
+  align-items: center;
+}
+
+.hero-btn-docs {
+  font-size: 1rem;
+  padding: 0.75rem 1.6rem;
+}
+
+.hero-btn-telegram {
+  font-size: 1rem;
+  padding: 0.75rem 1.4rem;
 }
 
 .hero-terminal {
@@ -372,7 +383,7 @@
 /* Pilares Técnicos Grid */
 .pillars-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
   gap: 1.5rem;
   margin-top: 3rem;
 }
@@ -567,7 +578,7 @@
    ========================================================================== */
 .tools-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
   gap: 1.5rem;
   margin-top: 2rem;
 }
@@ -768,41 +779,203 @@
 }
 
 /* ==========================================================================
-   RESPONSIVE DESIGN
+   RESPONSIVE DESIGN (LANDING PAGE)
    ========================================================================== */
 @media (max-width: 1024px) {
   .hero-container {
     grid-template-columns: 1fr;
     gap: 3rem;
   }
+  .hero-terminal {
+    max-width: 700px;
+    margin: 0 auto;
+    width: 100%;
+  }
   .rule-321-grid {
     grid-template-columns: 1fr;
+    gap: 1.25rem;
   }
   .arch-flow-row {
     grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
   }
   .arch-dual-triggers {
     grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .tools-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 768px) {
+  /* Optimización GPU de orbes difuminados para móviles */
+  .mesh-orb {
+    filter: blur(60px);
+    opacity: 0.3;
+  }
+  .mesh-orb-1 { width: 340px; height: 340px; top: -60px; left: -30px; }
+  .mesh-orb-2 { width: 300px; height: 300px; top: 30%; right: -40px; }
+  .mesh-orb-3 { width: 320px; height: 320px; bottom: -30px; left: 5%; }
+  .mesh-orb-4 { width: 260px; height: 260px; top: 65%; right: 5%; }
+
   .hero {
-    padding: 3.5rem 1rem 3rem;
+    padding: 3.25rem 1rem 2.75rem;
+  }
+  .hero-pill {
+    font-size: 0.775rem;
+    padding: 0.3rem 0.75rem;
   }
   .hero-title {
-    font-size: 2.25rem;
+    font-size: clamp(1.85rem, 5.5vw, 2.5rem);
+    letter-spacing: -0.02em;
+  }
+  .hero-subtitle {
+    font-size: clamp(0.95rem, 2.6vw, 1.1rem);
+    line-height: 1.6;
+  }
+  
+  .section-header {
+    margin-bottom: 2.25rem;
   }
   .section-title {
-    font-size: 1.85rem;
+    font-size: clamp(1.6rem, 4.5vw, 2rem);
+  }
+  .section-description {
+    font-size: 0.985rem;
+  }
+  .landing-section {
+    padding: 3.25rem 1rem;
+  }
+
+  /* Arquitectura */
+  .architecture-container {
+    padding: 1.35rem 1rem;
+    border-radius: 18px;
   }
   .arch-flow-row {
     grid-template-columns: 1fr;
   }
+  .arch-connector-row {
+    flex-direction: column;
+    gap: 0.4rem;
+    text-align: center;
+    padding: 0.25rem 0;
+  }
+  .arch-connector-line {
+    display: none;
+  }
+  .arch-dual-triggers {
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  /* Herramientas */
   .tools-grid {
     grid-template-columns: 1fr;
+    gap: 1.25rem;
   }
+
+  /* Tabla de Fases */
+  .phases-table-container {
+    border-radius: 16px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .phases-table th, 
+  .phases-table td {
+    padding: 0.85rem 1rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.75rem;
+  }
+  .hero-actions .btn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.8rem 1.2rem;
+  }
+
+  .rule-card {
+    padding: 1.35rem;
+    border-radius: 18px;
+  }
+  .rule-card h3 {
+    font-size: 1.15rem;
+  }
+  .rule-detail {
+    font-size: 0.775rem;
+    padding: 0.65rem 0.85rem;
+    word-break: break-all;
+  }
+
+  .pillar-item {
+    padding: 1.2rem;
+    border-radius: 16px;
+  }
+
+  .tool-card {
+    padding: 1.35rem;
+    border-radius: 18px;
+  }
+
+  .trigger-box {
+    padding: 1rem;
+    border-radius: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 2.5rem 0.85rem 2rem;
+  }
+  .hero-badges {
+    gap: 0.35rem;
+  }
+  .tech-badge {
+    font-size: 0.72rem;
+    padding: 0.2rem 0.45rem;
+  }
+  
+  .hero-terminal {
+    font-size: 0.75rem;
+    border-radius: 14px;
+  }
+  .terminal-header {
+    padding: 0.55rem 0.75rem;
+  }
+  .terminal-body {
+    padding: 0.75rem;
+    max-height: 300px;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
   .landing-section {
-    padding: 3.5rem 1rem;
+    padding: 2.75rem 0.85rem;
+  }
+  .architecture-container {
+    padding: 1rem 0.75rem;
+  }
+  .arch-node {
+    padding: 0.95rem;
+    border-radius: 14px;
+  }
+  .arch-node-title {
+    font-size: 0.875rem;
+  }
+  .arch-node-code {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.5rem;
+  }
+
+  .phases-table th, 
+  .phases-table td {
+    padding: 0.7rem 0.75rem;
+    font-size: 0.8rem;
   }
 }

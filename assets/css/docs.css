@@ -629,6 +629,28 @@
   z-index: 35;
 }
 
+/* Sidebar Bot Card */
+.sidebar-bot-card {
+  margin-top: auto;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.85rem;
+}
+
+.sidebar-bot-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-docs-back .btn-text-short {
+  display: none;
+}
+.btn-docs-back .btn-text-full {
+  display: inline;
+}
+
 @media (max-width: 1200px) {
   .docs-main {
     padding: 2.5rem 2rem 4rem;
@@ -645,8 +667,11 @@
     top: var(--header-height);
     left: 0;
     bottom: 0;
+    width: min(85vw, 300px);
+    min-width: unset;
     transform: translateX(-100%);
     box-shadow: var(--shadow-lg);
+    background: var(--bg-secondary);
   }
   .docs-sidebar.open {
     transform: translateX(0);
@@ -655,15 +680,99 @@
     display: block;
   }
   .docs-main {
-    padding: 1.75rem 1rem 3rem;
+    padding: 1.35rem 0.85rem 3rem;
+  }
+  .markdown-body h1:first-child {
+    font-size: clamp(1.5rem, 5vw, 1.85rem) !important;
+  }
+  .markdown-body h2 {
+    font-size: 1.3rem;
+    margin-top: 1.85rem;
+  }
+  .markdown-body h3 {
+    font-size: 1.1rem;
+  }
+  .markdown-body p, 
+  .markdown-body li {
+    font-size: 0.925rem;
+  }
+  .code-block-wrapper {
+    border-radius: 10px;
+    margin: 1rem 0;
+  }
+  .code-block-header {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.725rem;
+  }
+  .copy-code-btn {
+    font-size: 0.725rem;
+    padding: 0.2rem 0.5rem;
+  }
+  .code-block-wrapper pre code {
+    font-size: 0.78rem;
+    padding: 0.85rem;
+    -webkit-overflow-scrolling: touch;
+  }
+  .obsidian-callout {
+    padding: 0.95rem 1rem;
+    border-radius: 12px;
+    margin: 1.25rem 0;
+  }
+  .callout-title {
+    font-size: 0.875rem;
+  }
+  .callout-body {
+    font-size: 0.875rem;
+  }
+  .table-responsive {
+    -webkit-overflow-scrolling: touch;
+    margin: 1.25rem 0;
+  }
+  .markdown-body table th,
+  .markdown-body table td {
+    padding: 0.65rem 0.85rem;
+    font-size: 0.825rem;
+  }
+  .docs-breadcrumb {
+    font-size: 0.75rem;
+    flex-wrap: wrap;
+    gap: 0.35rem;
   }
   .docs-pagination {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+  .pagination-btn {
+    padding: 0.85rem 1rem;
+    border-radius: 12px;
   }
   .pagination-btn.next {
     grid-column: 1;
     align-items: flex-start;
     text-align: left;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-docs-back .btn-text-full {
+    display: none;
+  }
+  .btn-docs-back .btn-text-short {
+    display: inline;
+  }
+  .btn-docs-back {
+    padding: 0.4rem 0.65rem !important;
+    font-size: 0.8rem !important;
+  }
+  .docs-main {
+    padding: 1.15rem 0.75rem 2.5rem;
+  }
+  .markdown-body h1:first-child {
+    font-size: 1.45rem !important;
+  }
+  .obsidian-callout {
+    padding: 0.85rem;
   }
 }
 
